@@ -1,6 +1,9 @@
 package ocp8.funcional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FuncionalTeste {
@@ -48,6 +51,12 @@ public class FuncionalTeste {
 		System.out.println(stream2.peek(System.out::print).allMatch(pred)); //true e finaliza o Stream, não podendo ser usado novamente
 	}	
 	
+	
+	private static void teste04() {
+		List<String> lista = new ArrayList<>();
+		
+		lista.stream().sorted().collect(Collectors.toList());
+	}
 	
 	public static void main(String[] args) {
 		teste03();
