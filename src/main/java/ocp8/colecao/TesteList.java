@@ -1,4 +1,4 @@
-package ocp8.collections;
+package ocp8.colecao;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
