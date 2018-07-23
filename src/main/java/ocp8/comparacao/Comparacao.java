@@ -1,4 +1,4 @@
-package br.com.ocp.comparacao;
+package ocp8.comparacao;
 
 public class Comparacao {
 

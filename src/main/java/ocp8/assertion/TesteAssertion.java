@@ -1,4 +1,4 @@
-package br.com.ocp.assertion;
+package ocp8.assertion;
 
 public class TesteAssertion {
 

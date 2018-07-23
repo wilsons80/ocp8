@@ -1,4 +1,4 @@
-package br.com.ocp.casting;
+package ocp8.casting;
 
 public class Capybara extends Rodent {
 	

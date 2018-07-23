@@ -1,4 +1,4 @@
-package br.com.ocp.data;
+package ocp8.data;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

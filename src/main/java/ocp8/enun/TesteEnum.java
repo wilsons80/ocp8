@@ -1,4 +1,4 @@
-package br.com.ocp.enun;
+package ocp8.enun;
 
 public class TesteEnum {
 	

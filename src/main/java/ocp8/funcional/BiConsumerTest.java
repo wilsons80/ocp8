@@ -1,4 +1,4 @@
-package br.com.ocp.funcional;
+package ocp8.funcional;
 
 import java.util.function.BiConsumer;
 

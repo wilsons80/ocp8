@@ -1,4 +1,4 @@
-package br.com.ocp.hashcode;
+package ocp8.hashcode;
 
 public class Teste {
 	

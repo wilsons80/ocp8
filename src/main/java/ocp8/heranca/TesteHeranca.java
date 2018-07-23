@@ -1,4 +1,4 @@
-package br.com.ocp.heranca;
+package ocp8.heranca;
 
 public class TesteHeranca {
 	

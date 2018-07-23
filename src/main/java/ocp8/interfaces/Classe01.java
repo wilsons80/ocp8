@@ -1,4 +1,4 @@
-package br.com.ocp.interfaces;
+package ocp8.interfaces;
 
 public class Classe01 implements IPessoa {
 

@@ -1,4 +1,4 @@
-package br.com.ocp.interfaces;
+package ocp8.interfaces;
 
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;

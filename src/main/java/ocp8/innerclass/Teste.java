@@ -1,4 +1,4 @@
-package br.com.ocp.innerclass;
+package ocp8.innerclass;
 
 public class Teste {
 	
@@ -27,7 +27,7 @@ public class Teste {
 		Teste01.Teste02 t2 = t03.new  Teste02();
 		t2.teste02();
 		
-		br.com.ocp.innerclass.Teste.Teste01.Teste02 t = t2;
+		ocp8.innerclass.Teste.Teste01.Teste02 t = t2;
 		t.teste02();
 		
 		inter.metodoInterface();
