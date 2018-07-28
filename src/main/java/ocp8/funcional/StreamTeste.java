@@ -8,6 +8,10 @@ import java.util.Optional;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.*;
+
+import java.io.ByteArrayInputStream;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -123,9 +127,35 @@ public class StreamTeste {
 		
 	}
 
+	public static void teste05() {
+		Byte[] buffer = {1,52,98,47,50};
+		byte[] buffer1 = {1,52,98,47,50};
+		
+		String v1 = Stream.of(buffer).map(String::valueOf).reduce("",String::concat);
+		String v2 = Arrays.stream(buffer).map(String::valueOf).reduce("",String::concat);
+		String v3 = Arrays.stream(buffer).collect(Collectors.reducing("",String::valueOf,String::concat));
+		String v4 = Arrays.asList(buffer).stream().map(String::valueOf).reduce("", String::concat);
+		
+		Optional<String> v5 = Arrays.asList(buffer).stream()
+				                    .flatMapToInt(x -> IntStream.of(x))
+				                    .mapToObj(String::valueOf)
+				                    .reduce(String::concat); //reduce com apenas um parametro retorna um Optional
+		
+		String v6 = Arrays.asList(buffer).stream().map(String::valueOf).collect(Collectors.joining(""));
+		
+		System.out.println(v1);
+		System.out.println(v2);
+		System.out.println(v3);
+		System.out.println(v4);
+		System.out.println(v5.orElse("erro"));
+		System.out.println(v6);
+		
+		
+	}
+
 	
 	public static void main(String[] args) {
-		teste04();
+		teste05();
 	}
 
 }
