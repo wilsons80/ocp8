@@ -1,17 +1,28 @@
 package ocp8.funcional;
 
+import static java.util.stream.Collectors.averagingDouble;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.maxBy;
+import static java.util.stream.Collectors.reducing;
+import static java.util.stream.Collectors.summingDouble;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalLong;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.function.DoubleBinaryOperator;
+import java.util.function.IntBinaryOperator;
 import java.util.function.Predicate;
-import static java.util.stream.Collectors.*;
-
-import java.io.ByteArrayInputStream;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 
@@ -128,8 +139,8 @@ public class StreamTeste {
 	}
 
 	public static void teste05() {
+		byte[] buffer1 = {1,52,98,47,50}; //com tipo primitivo NÃO funciona
 		Byte[] buffer = {1,52,98,47,50};
-		byte[] buffer1 = {1,52,98,47,50};
 		
 		String v1 = Stream.of(buffer).map(String::valueOf).reduce("",String::concat);
 		String v2 = Arrays.stream(buffer).map(String::valueOf).reduce("",String::concat);
@@ -141,7 +152,7 @@ public class StreamTeste {
 				                    .mapToObj(String::valueOf)
 				                    .reduce(String::concat); //reduce com apenas um parametro retorna um Optional
 		
-		String v6 = Arrays.asList(buffer).stream().map(String::valueOf).collect(Collectors.joining(""));
+		String v6 = Arrays.asList(buffer).stream().map(String::valueOf).collect(Collectors.joining());
 		
 		System.out.println(v1);
 		System.out.println(v2);
@@ -149,13 +160,110 @@ public class StreamTeste {
 		System.out.println(v4);
 		System.out.println(v5.orElse("erro"));
 		System.out.println(v6);
+	}
+
+	public static void teste06() {
+		LongStream ls = LongStream.of(1,2,3);
+		OptionalLong op = ls.map(x -> x*10).filter(x -> x < 5).findFirst();
+		op.getAsLong();
+	}
+	
+	public static void teste07() {
+		//!!! Não fará nada, pois não tem operação terminal
+		Stream.generate(() -> "1").limit(10).peek(System.out::println);
+	}
+	
+	public static void teste08() {
+		System.out.println(Stream.iterate(1, x -> x++)  //primeiro retorna depois soma, logo o resultado sempre será 1
+				                 .limit(5)
+				                 .map(x -> ""+x) //converte int para string para ser usado com o método joining
+				                 .collect(Collectors.joining()) //joining sempre retorna uma string
+				          );
 		
+		System.out.println(Stream.iterate(1, x -> ++x).limit(5).map(x -> ""+x).collect(Collectors.joining()));
+	}
+	
+	public static void teste09() {
+		Supplier<String> x = String::new;
+		BiConsumer<String,String> y = (a,b) -> System.out.println();
+		UnaryOperator<String> z = a -> a+a;
+		
+		List<Integer> lista = Arrays.asList();
+		System.out.println(lista);
+	}
+	
+	
+	public static void teste10() {
+		Stream<Integer> s = Stream.of(1);
+		IntStream is = s.mapToInt(x -> x);
+		DoubleStream ds = s.mapToDouble(x -> x);
+		
+		LongStream ls2 = is.mapToLong(x-> x);
+		
+		LongStream ls1 = LongStream.of(1);
+		IntStream is2 = ls1.mapToInt(x -> {return (int)x;}); //Cast de Long para int
+		
+		//Stream<Integer> s2 = ds.mapToObj(x -> x); //não consegue converter double para Integer
+		
+		//Stream<Long> s3 = Stream.of(1); //não consegue converter Stream<Integer> para Stream<Long>
+		
+		Stream<Long> s4 = Stream.of(1L);
+		//LongStream is1 = s4.mapToInt(x -> x); //não consegue converter long para int
 		
 	}
 
+	public static void teste11() {
+		List<Integer> lista = Arrays.asList(1,2,3,4,5);
+		
+		AtomicInteger valor = new AtomicInteger(0);
+		valor.set(0);
+		valor.set(1);
+		
+		IntBinaryOperator add = (a,b) -> a+b;
+		IntBinaryOperator mult = (a,b) -> a*b;
+		
+		int r = valor.accumulateAndGet(1, add);
+		System.out.println(r);
+		
+		r = valor.accumulateAndGet(1, mult);
+		System.out.println(r);
+		
+		r = valor.incrementAndGet();
+		System.out.println(r);
+
+		r = valor.getAndIncrement();
+		System.out.println(r);
+
+		lista.forEach( x-> {valor.accumulateAndGet(x, add);} ); //add::applyAsInt não pode ser usado, pois não é static
+		lista.forEach( x-> {valor.accumulateAndGet(x, (a,b) -> a+b);} );
+		
+		System.out.println(valor.get());
+	}
+	
+	public static void teste12() {
+		List<String> lista = Arrays.asList("daniel", "wilson", "paula", "carvalho", "souza", "duo");
+		
+		Predicate<String> pred = x -> x.length() < 6;
+		Map<Boolean, List<String>> mapa = lista.stream().collect(Collectors.partitioningBy(pred));
+		
+		mapa.keySet().forEach( (k) -> {
+			System.out.print("\n" + k + ": ");
+			mapa.get(k).stream().forEach(x -> System.out.print(x + " - "));
+		});
+		
+		Map<Boolean, Map<Integer, List<String>>> mapa2 = lista.stream().collect(Collectors.partitioningBy(pred, Collectors.groupingBy(String::length)));
+		mapa2.keySet().forEach(k -> {
+			System.out.print("\n" + k + ": ");
+			mapa2.get(k).keySet().forEach( t -> {
+				System.out.print("\n\t" + t + ": ");
+				mapa2.get(k).get(t).forEach(p -> System.out.print(p + " - "));
+			});
+		});
+		
+	}
 	
 	public static void main(String[] args) {
-		teste05();
+		teste12();
 	}
 
 }
