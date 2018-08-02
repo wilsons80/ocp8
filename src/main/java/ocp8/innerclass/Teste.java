@@ -20,7 +20,7 @@ public class Teste {
 				System.out.println("metodoInterface");
 			}
 		};
-		Teste.Teste01 t01 = new Teste.Teste01();
+		Teste.Teste01 t01 = new Teste.Teste01(); //bem diferente de como seria em um método static (veja o main)
 		Teste01       t02 = new Teste.Teste01();
 		Teste01       t03 = new Teste01();
 		
